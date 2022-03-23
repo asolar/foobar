@@ -1,0 +1,11 @@
+package com.tattoed.snowy;
+
+import com.tattoed.snowy.beans.RobotManager;
+
+public class FooBar {
+
+    public static void main(String[] args) throws InterruptedException {
+        RobotManager manager = RobotManager.getInstance();
+        manager.work();
+    }
+}
