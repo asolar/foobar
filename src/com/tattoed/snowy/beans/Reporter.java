@@ -18,7 +18,7 @@ public class Reporter {
         System.out.format("+------------+----------+%n");
 
 
-        System.out.print("--> Sold Foobars: ");
+        System.out.println("--> Sold Foobars count: " + warehouse.getSoldFooBar().size());
         for (String foobar : warehouse.getSoldFooBar()) {
             System.out.print(foobar + ", ");
         }

@@ -9,6 +9,7 @@ public class Warehouse {
     public static final int ROBOT_REQUIRED_EURO = 3;
     public static final int FOOBAR_MAX_SELL = 5;
     public static final int RATE_ASSEMBLE_SUCCESS = 60;
+    public static final int MAX_SELLABLE_FOOBAR = 5;
     private final ArrayList<String> foo;
     private final ArrayList<String> bar;
     private final ArrayList<String> foobar;
@@ -121,7 +122,7 @@ public class Warehouse {
     }
 
     int getSellableFoobar() {
-        return (foobar.size() - FOOBAR_MAX_SELL) < 0 ? foobar.size() : 5;
+        return (foobar.size() - FOOBAR_MAX_SELL) < 0 ? foobar.size() : MAX_SELLABLE_FOOBAR;
     }
 
     boolean fooRequired() {

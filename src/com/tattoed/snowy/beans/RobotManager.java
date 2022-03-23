@@ -11,16 +11,12 @@ public class RobotManager {
     private final LocalDateTime startTime;
     private final Warehouse warehouse;
 
-    private RobotManager(int initialRobotCount) {
+    public RobotManager(int initialRobotCount) {
         startTime = LocalDateTime.now();
         warehouse = new Warehouse();
         for (int i = 0; i < initialRobotCount; i++) {
             listRobot.add(new Robot(generateNameForRobot(i), this, warehouse));
         }
-    }
-
-    public static RobotManager getInstance() {
-        return LoadRobotManager.INSTANCE;
     }
 
     public ArrayList<Robot> getListRobot() {
@@ -41,15 +37,16 @@ public class RobotManager {
 
     synchronized RobotTask getNextBestTask() {
         updateStatus();
-        if (listRobot.size() >= MAX_ROBOT_COUNT || existsRobot(RobotTask.BUY_ROBOT) && listRobot.size() >= MAX_ROBOT_COUNT - 1) {
+        if (listRobot.size() >= MAX_ROBOT_COUNT || (existsRobot(RobotTask.BUY_ROBOT) && listRobot.size() >= MAX_ROBOT_COUNT - 1)) {
             return RobotTask.STOP;
         } else if (warehouse.canBuyRobot() && !existsRobot(RobotTask.BUY_ROBOT)) {
             return RobotTask.BUY_ROBOT;
-        } else if (warehouse.getSellableFoobar() > 0 && !existsRobot(RobotTask.SELL_FOOBAR)) {
+        } else if ((warehouse.getSellableFoobar() > 2 && !existsRobot(RobotTask.SELL_FOOBAR))
+                || (warehouse.getFoobar().size() / Warehouse.MAX_SELLABLE_FOOBAR > countRobot(RobotTask.SELL_FOOBAR))) {
             return RobotTask.SELL_FOOBAR;
-        } else if (warehouse.canAssembleFoobar() && (countRobot(RobotTask.ASSEMBLE) * 2 < countRobot(RobotTask.MINE_BAR) + countRobot(RobotTask.MINE_FOO))) {
+        } else if (warehouse.canAssembleFoobar() && (countRobot(RobotTask.ASSEMBLE) < countRobot(RobotTask.MINE_BAR) + countRobot(RobotTask.MINE_FOO))) {
             return RobotTask.ASSEMBLE;
-        } else if (warehouse.fooRequired() || (countRobot(RobotTask.MINE_BAR) >= countRobot(RobotTask.MINE_FOO))) {
+        } else if (warehouse.fooRequired() || (countRobot(RobotTask.MINE_BAR) > countRobot(RobotTask.MINE_FOO))) {
             return RobotTask.MINE_FOO;
         } else {
             return RobotTask.MINE_BAR;
@@ -87,7 +84,4 @@ public class RobotManager {
     }
 
 
-    private static class LoadRobotManager {
-        static final RobotManager INSTANCE = new RobotManager(2);
-    }
 }

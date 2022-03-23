@@ -11,6 +11,7 @@ public class Robot extends Thread {
     public static final int DURATION_BAR_MIN = 500;
     public static final int DURATION_FOO = 1000;
     public static final int DURATION_ASSEMBLE = 2000;
+    public static final int DURATION_SELLING = 10000;
     private final RobotManager manager;
     private final Warehouse warehouse;
     private final String name;
@@ -83,6 +84,7 @@ public class Robot extends Thread {
         move();
         state = RobotState.SELLING_FOOBAR;
         manager.updateStatus();
+        Thread.sleep(DURATION_SELLING);
         return warehouse.sellFoobar();
     }
 
